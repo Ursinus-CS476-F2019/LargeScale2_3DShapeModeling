@@ -1,0 +1,773 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+<!-- Header !-->
+	<head>
+		<title>Ursinus CS 476: Computer Graphics</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<!--[if lte IE 8]><script src="../../assets/js/ie/html5shiv.js"></script><![endif]-->
+		<link rel="stylesheet" href="../../assets/css/main.css" />
+		<!--[if lte IE 9]><link rel="stylesheet" href="../../assets/css/ie9.css" /><![endif]-->
+		<!--[if lte IE 8]><link rel="stylesheet" href="../../assets/css/ie8.css" /><![endif]-->
+        <style>
+        .image_off, #home:hover .image_on{
+           display:none
+        }
+        .image_on, #home:hover .image_off{
+           display:block
+        }
+        </style>
+	</head>
+	<body>
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+
+							<!-- Header -->
+								<header id="header">
+									<a href="../../index.html" class="logo"><strong>Ursinus CS 476: Computer Graphics</strong></a>
+								</header>
+<!-- End Header !-->
+
+							<!-- Content -->
+								<section>
+									<header class="main">
+                                        <h2>Large Scale Assignment 2: Polygon Mesh Processing (100 Points)</h2>
+                                        <h3>Due Wednesday 11/20/2019 at 11:59PM</h3>
+									</header>
+
+									<div id="page-content">
+										<h3>
+											<ul>
+                                                <li><a href = "#overview">Overview</a></li>
+                                                <li><a href = "#traversal">Mesh Traversal</a>
+                                                    <ul>
+                                                        <li><a href = "#facegetEdges">face.getEdges() (6 Points)</a></li>
+                                                        <li><a href = "#vertexgetVertexNeighbors">vertex.getVertexNeighbors (7 Points)</a></li>
+                                                        <li><a href = "#vertexgetAttachedFaces">vertex.getAttachedFaces (7 Points)</a></li>
+                                                    </ul>
+                                                </li>
+                                                <li><a href = "#geometric">Geometric Tasks</a>
+                                                    <ul>
+                                                        <li><a href = "#facegetArea">face.getArea() (5 Points)</a></li>
+                                                        <li><a href = "#vertexgetNormal">vertex.getNormal() (10 Points)</a></li>
+                                                        <li><a href = "#inflateDeflate">Inflate/Deflate (10 Points)</a></li>
+                                                    </ul>
+                                                </li>
+                                                <li><a href = "#geometricextra">Geometric Tasks: Extra</a>
+                                                    <ul>
+                                                        <li><a href = "#smoothsharpen">Laplacian Smooth/Sharpen (10 Points)</a></li>
+                                                        <li><a href = "#warp">Per-Vertex Warp (10 Points)</a></li>
+                                                    </ul>
+                                                </li>
+                                                <li><a href = "#topological">Topological Tasks</a>
+                                                <ul>
+                                                    <li><a href = "#boundaryCycles">Find Boundary Cycles (10 Points)</a></li>
+                                                    <li><a href = "#genus">Genus of A Watertight Mesh (5 Points)</a></li>
+                                                </ul>
+                                                </li>
+                                                <li><a href = "#topologicalextra">Topological Tasks: Extra</a>
+                                                    <ul>
+                                                        <li><a href = "#fillHoles">Fill Holes (15 Points)</a></li>
+                                                    </ul>
+                                                </li>
+                                                <li><a href = "#meshcreation">Mesh Creation Tasks</a> (Pick one)
+                                                <ul>
+                                                    <li><a href = "#subdivision">Linear Subdivision (20 pts) or Loop Subdivision (30 pts)</a></li>
+                                                    <li><a href = "#truncate">Truncate (20 pts)</a></li>
+                                                </ul></li>
+
+                                                <li><a href = "#artcontest">Art Contest (5 Points extra)</a></li>
+											</ul>
+										</h3>
+										
+										<h2><a name = "overview">Overview</a></h2>
+										<p>
+                                            The most ubiquitous representation of 2D surfaces in 3D space is the polygon mesh.  In this assignment, you will explore the <i>half-edge dsta structure</i>, which is the gold standard for traversing oriented manifold meshes.  You will begin with some basic traversal tasks, which will then unlock some more advanced topological and geometric operations.
+                                        </p>
+                                        
+                                        <h3>Scoring</h3>
+                                        <p>
+                                            This assignment is out of <b>100 points</b>.  80 of these points are <b>required tasks</b> that everyone has to do.  Beyond that, there are a number of extra points up for grabs which you can choose from to pursue your interests and "make the assignment your own."  Any points that you get beyond 20 will apply to extra credit at a rate of 1 point, 4/5 points, 4/5^2 points, 4/5^3 points, etc.  The required points and the optional points will be graded independently.  So, for instance, if you get an 75/80 on the required points and you earn 30 optional points, then your final score will be <b>75 + 20 + 4.6 = 99.4/100</b> points, which is quite a formidable score!
+                                        </p>
+
+                                        <h3><a name = "collaboration">Collaboration</a></h3>
+                                        <p>
+                                            You are allowed to work very closely with other students in the class in a "buddy" capacity, and even to look at each others' code as you're debugging.  <b>But I expect each student to submit their own code.</b>  Please indicate to me on your README who your buddies were.
+                                        </p>
+
+										<h3>Getting Started</h3>
+										<p>
+										
+                                        </p>
+                                        
+                                        <ol>
+                                            <li>
+                                                <a href = "https://github.com/Ursinus-CS476-F2019/LargeScale2_3DShapeModeling">Click here</a> to download the repository of skeleton code for this assignment.  Note that you will also need to download <b>the most recent version</b> of <a href = "https://github.com/ctralie/ggslac/">ggslac</a> and place it at the root of the LargeScale2_3DShapeModeling assignment.  If you have git installed on your computer, you can simply type
+                                                <p>
+                                                    <code>
+                                                            git clone --recursive https://github.com/Ursinus-CS476-F2019/LargeScale2_3DShapeModeling.git
+                                                    </code>
+                                                </p>
+                                                <p>
+                                                <b>NOTE:</b>  You will only need to edit <code>halfedgemesh.js</code> to complete all of the tasks in the assignment.
+                                                </p>
+                                            </li>
+                                            <li>
+                                                As with prior assignments, you will need to run a local web server to get this to work.
+                                                </p>
+                                            </li>
+                                            <li>
+                                                The collection of meshes in ggslac has recently been updated, so you should play around with the meshes in the meshes/ directory in ggslac.  If you want to use any additional meshes, make sure they are .off files.  If not, use <a href = "http://www.meshlab.net/">meshlab</a> to convert them.
+                                            </li>
+                                        </ol>
+
+
+                                        <h3>Half Edge Objects</h3>
+
+                                        <p>
+                                            The three object subtypes for a half edge mesh are <code>HEdge</code> (for a half edge), <code>HFace</code> (for a face), and <code>HVertex</code> (for a vertex).  Their fields are as follows:
+                                        </p>
+
+                                        <table>
+                                            <tr><td>
+                                                <h4><code>HEdge</code></h4>
+                                                <ul>
+                                                    <li><code>HVertex head</code>: A pointer to the vertex at the head of this half-edge</li>
+
+                                                    <li><code>HFace face</code>: A pointer to the face to the left of this half-edge</li>
+
+                                                    <li><code>HEdge pair</code>: A pointer to the opposite half-edge</li>
+
+                                                    <li><code>HEdge prev</code>: A pointer to the previous half-edge in CCW order</li>
+
+                                                    <li><code>HEdge next</code>: A pointer to the next half-edge in CCW order</li>
+                                                </ul>
+                                            </td></tr>
+                                        </table>
+
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <h4>HVertex</h4>
+                                                    <ul>
+                                                        <li><code>vec3 pos</code>: The position of the vertex (the only geometric property in the whole data structure)</li>
+
+                                                        <li><code>vec3 color</code>: The color of the vertex (you can safely ignore this)</li>
+
+                                                        <li><code>HEdge h</code>: A pointer to any half-edge that has this vertex as its tail.</li>
+                                                    </ul>
+                                                </td>
+                                            </tr>
+                                        </table>
+
+
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <h4>HFace</h4>
+                                                    <ul>
+                                                        <li><code>HEdge h</code>: A pointer to any half-edge that has this face as its left face.</li>
+                                                    </ul>
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                        <h3>Debugging GUI</h3>
+                                        <p>
+                                        The main file where you view the results of your ray tracer is <code><a href = "MeshProcessing.html">MeshProcessing.html</a></code>.  There are various menus here that you can use to test the different features that you implement.
+                                        </p>
+
+										<h2><a name = "submission">Submission Instructions</a></h2>
+										
+										You will submit your <code>halfedge.js</code> code to Canvas when you are finished, along with screenshots and .off files for the art contest, if you choose to submit something.  Please also submit a <b><code>README.txt</code></b> file with both submissions with the following information:
+										<ol>
+                                        <li>Your name<BR><BR></li>
+                                        <li>The "buddies" you worked with (see <a href = "#collaboration">collaboration</a> above)</li>
+                                        <li>A list of tasks that you implemented, and how many points you believe you earned.</li>
+                                        <li>A description of your art contest submission if you have one, as well as:
+                                        <ul>
+                                                <li>One of the two statements below
+                                                        <ol>
+                                                            <li>
+                                                                "I consent to have my art contest submission posted publicly on the class web site.  My name/pseudonym for public display is <u>&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp.</u>
+                                                            </li>
+                                                            <li>
+                                                                "I do not wish to post my art contest submission publicly"
+                                                            </li>
+                                                        </ol>
+            
+                                                    </li>
+                                        </ul>
+                                        </li>
+
+										<li>Approximately how many hours it took you to finish this assignment (<i>I will not judge you for this at all...I am simply using it to gauge if the assignments are too easy or hard</i>)<BR><BR></li>
+										<li>Your overall impression of the assignment.  Did you love it, hate it, or were you neutral?  One word answers are fine, but if you have any suggestions for the future let me know.<BR><BR></li>
+										
+										<li>Any other concerns that you have.</li>
+										</ol>
+                                        
+                                            
+
+                                            
+
+										<HR>
+                                        <h2><a name = "traversal">Mesh Traversal</a></h2>
+
+                                        <p>
+                                            <b>NOTE: </b> You will have to finish these tasks before moving onto the <a href = "#geometric">geometric</a> and <a href = "#topological">topological</a> tasks.
+                                        </p>
+
+                                        <p>
+                                            <b>NOTE ALSO: </b> The lighting will not look very good in this until you get the <a href = "#vertexnormals">per-vertex normals</a> working, which requires some of the traversal functions in this section.  To see the mesh better before then, you should click <code>drawEdges</code> in <code>Mesh Display Options</code>.
+                                        </p>
+
+                                        <h3><a name = "facegetEdges">face.getEdges() (6 Points)</a></h3>
+                                        
+                                        <p>
+                                            Given an <code>HFace</code> class, return a list of the half-edges that have it as its face, in CCW order
+                                        <p>
+                                        
+                                        
+                                        <p>
+                                        <h4>Code To Write</h4> You should fill in the <code>getEdges()</code> function of the <code>HFace</code> class.
+                                        </p>
+
+
+										<div id = "tips">
+											<h4>Tips</h4>
+											<ul>
+                                            <li>A do while loop is a good choice for this task.</li>
+                                            <li>With this and with all of the other tasks, you can assume that the half-edge mesh has been initialized properly, and that the <code>next</code> pointer points to any half-edge in CCW order.</li>
+											</ul>
+                                        </div>
+                                        
+                                        <h3>Debugging GUI</h3>
+                                        If you visit the <code>Face Tests</code> menu in MeshProcessing.html, you can test this function on a particular face when you click "showResult."  This will display a magenta list of edges that were returned superimposed on the mesh, as shown below on <code>box2402.off</code>:<BR><BR>
+                                            <img src = "Examples/GetEdges1.png">
+
+
+
+
+
+
+                                        <h3><a name = "vertexgetVertexNeighbors">vertex.getVertexNeighbors() (7 Points)</a></h3>
+                                    
+                                        <p>
+                                            Given an <code>HVertex</code> class, return a list of vertices that are attached to it
+                                        <p>
+                                        
+                                        
+                                        <p>
+                                        <h4>Code To Write</h4> You should fill in the <code>getVertexNeighbors()</code> function of the <code>HVertex</code> class.
+                                        </p>
+
+
+                                        <div id = "tips">
+                                            <h4>Tips</h4>
+                                            <ul>
+                                            <li>A do while loop is a good choice for this task.</li>
+                                            <li>As discussed in class, you will have to jump across a lot of pairs to make this work.</li>
+                                            </ul>
+                                        </div>
+                                        
+                                        <h3>Debugging GUI</h3>
+                                        If you visit the <code>Vertex Tests</code> menu in MeshProcessing.html, you can test this function on a particular vertex when you click "showResult."  This will display a cyan list of vertices (and the edges that attach them) returned from your function, superimposed on the mesh, as shown below (<code>icosahedroncut.off</code> is a good small mesh to test this on which covers a lot of cases):<BR><BR>
+                                        
+                                            <table>
+                                                <tr>
+                                                    <td><img src = "Examples/AttachedVertices1.png"></td>
+                                                    <td><img src = "Examples/AttachedVertices2.png"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2"><img src = "Examples/AttachedVertices3.png"></td>
+                                                </tr>
+                                            </table>
+
+
+
+                                        <h3><a name = "vertexgetAttachedFaces">vertex.getAttachedFaces() (7 Points)</a></h3>
+                                
+                                        <p>
+                                            Given an <code>HVertex</code> class, return a list of faces that have this as a vertex
+                                        <p>
+                                        
+                                        
+                                        <p>
+                                        <h4>Code To Write</h4> You should fill in the <code>getAttachedFaces()</code> function of the <code>HVertex</code> class.
+                                        </p>
+
+
+                                        <div id = "tips">
+                                            <h4>Tips</h4>
+                                            <ul>
+                                            <li>This is incredibly similar to the last task, except when you're creating a list of faces, be sure to only add a face if it is not null (!(h.face === null)).  Otherwise, you will run into some problems later with meshes that have boundaries.</li>
+                                            </ul>
+                                        </div>
+                                        
+                                        <h3>Debugging GUI</h3>
+                                        If you visit the <code>Vertex Tests</code> menu in MeshProcessing.html, you can select this function from a dropdown menu and test it on a particular vertex when you click "showResult."  This will display a cyan list of vertices (and the edges that attach them) returned from your function, superimposed on the mesh, as shown below:<BR><BR>
+                                        
+                                            <table>
+                                                <tr>
+                                                    <td><img src = "Examples/AttachedFaces1.png"></td>
+                                                    <td><img src = "Examples/AttachedFaces2.png"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><img src = "Examples/AttachedFaces3.png"></td>
+                                                    <td><img src = "Examples/AttachedFaces4.png"></td>
+                                                </tr>
+                                            </table>
+
+
+
+
+
+                                        <HR>
+                                            <h2><a name = "geometric">Geometric Tasks</a></h2>
+    
+                                            <p>
+                                                <b>NOTE: </b> While you may need to perform topological traversals to help you with this task, the only variable that you will ever update is the position of a vertex, which is the only geometric property in the mesh.
+                                            </p>
+
+                                            <h3><a name = "facegetArea">face.getArea() (5 Points)</a></h3>
+                                
+                                            <p>
+                                                Given an <code>HFace</code> class, return its area
+                                            <p>
+                                            
+                                            
+                                            <p>
+                                            <h4>Code To Write</h4> You should fill in the <code>face.getArea()</code> function of the <code>HFace</code> class.
+                                            </p>
+    
+    
+                                            <div id = "tips">
+                                                <h4>Tips</h4>
+                                                <ul>
+                                                    <li>Every face with <b>N</b> edges can be divided into <b>N-2</b> triangles.</li>
+                                                    <li>You can (and should) reuse your <a href = "../Mini1_GeometricPrimitives/index.html#area">triangle area code from mini assignment 1</a></li>
+                                                </ul>
+                                            </div>
+                                            
+
+
+
+
+                                        <h3><a name = "vertexgetNormal">vertex.getNormal() (10 Points)</a></h3>
+                            
+                                        <p>
+                                            Given an <code>HVertex</code> class, return a normal associated to it, which is the weighted average of the face normals attached to this vertex, weighted by the respective face areas.
+                                        <p>
+                                        
+                                        
+                                        <p>
+                                        <h4>Code To Write</h4> You should fill in the <code>getNormal()</code> function of the <code>HVertex</code> class.  You should also fill in the <code>getNormal()</code> function of <code>HFace</code> as a helper function.  For the face normals, you can assume that they are flat, so that you only need to compute the normal of a single triangle in the face if it has more than three edges.
+                                        </p>
+
+
+                                        <div id = "tips">
+                                            <h4>Tips</h4>
+                                            <ul>
+                                            <li>You should make use of your <code><a href = "#vertexgetAttachedFaces">vertex.getAttachedFaces()</a></code> function</li>
+                                            <li>Make sure your face (and subsequently vertex) normals are actually normalized.  For the large meshes with many small triangles, if you just use the cross product, it will have a very small magnitude, and this will affect later tasks (particularly inflate/deflate).</li>
+                                            </ul>
+                                        </div>
+                                        
+                                        <h3>Debugging GUI</h3>
+                                        <p>
+                                            You can display the normals you calculate by clicking <code>drawNormals</code> in the <code>Mesh Display Options</code> menu.  Below shows a before and after on <code>cow.off</code> (by default, the normals start off all pointing to the right)
+                                        </p>
+                                        
+                                            <table>
+                                                <tr>
+                                                    <td><h3>Before</h3></td>
+                                                    <td><h3>After</h3></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><img src = "Examples/Normals_Cow_Before.png"></td>
+                                                    <td><img src = "Examples/Normals_Cow_After.png"></td>
+                                                </tr>
+                                            </table>
+                                        
+                                        <p>
+                                            Furthermore, the Blinn-Phong shading will look much better with the correct normals once you have them.  Below is an example on <code>homer.off</code>
+                                        </p>
+                                        <table>
+                                            <tr>
+                                                <td><h3>Before</h3></td>
+                                                <td><h3>After</h3></td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src = "Examples/Normals_Before.png"></td>
+                                                <td><img src = "Examples/Normals_After.png"></td>
+                                            </tr>
+                                        </table>    
+
+
+
+
+                                    <h3><a name = "inflateDeflate">Inflate/Deflate (10 Points)</a></h3>
+                        
+                                    <p>
+                                        Move each vertex of the mesh by some pre-specified amount along its normal.
+                                    <p>
+                                    
+                                    
+                                    <p>
+                                    <h4>Code To Write</h4> You should fill in the <code>inflateDeflate()</code> function of the <code>HEdgeMesh</code> class.
+                                    </p>
+
+
+                                    <div id = "tips">
+                                        <h4>Tips</h4>
+                                        <ul>
+                                        <li>You will have to loop through all of the vertices in the mesh, which are stored in a list <code>vertices</code> which is a property of <code>HEdgeMesh</code> (NOTE: The vertices are not stored in any particular order).</li>
+                                        <li>You should only update the <code>pos</code> field of each <code>HVertex</code>; the topology should remain fixed. </li>
+                                        <li>The <code>scaleAndAdd()</code> function of <code>vec3</code> will come in handy here.  <a href = "http://glmatrix.net/docs/module-vec3.html">Click here</a> to see the documentation.</li>
+                                        <li>Note that the normals change after you apply these operations, so they are not directly invertible.  This means you should not expect to get the same result when you deflate after inflating, for instance.</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <h3>Debugging GUI</h3>
+                                    <p>
+                                        You can display the result of this operation by clicking <code>inflateDeflate</code> in the <code>Geometric Tasks</code> menu.  You can set the factor by which to inflate with the <code>inflateFac</code> slider.  A positive number inflates, and a negative number deflates.  Depending on the dimensions of your mesh, you may have to adjust the dynamic range of this a lot (e.g. a mesh whose bounding box is [0, 1000] x [0, 1000] x [0, 1000] is much less affected by moving along the normal by a factor of 0.1 than a mesh whose bounding box is [0, 1] x [0, 1] x [0, 1])
+                                    </p>
+
+                                    <p>
+                                        Below is an example of running the function on <code>bunny.off</code> with a factor of <b>0.005</b>
+                                    </p>
+                                    
+                                        <table>
+                                            <tr>
+                                                <td><h3>Before</h3></td>
+                                                <td><h3>After</h3></td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src = "Examples/BunnyInflate.png"></td>
+                                                <td><img src = "Examples/BunnyInflate_0.005.png"></td>
+                                            </tr>
+                                        </table>
+
+                                        <p>
+                                            Below is an example of running the function on <code>homer.off</code> with a factor of <b>-0.005</b>, which is actually a deflation.  Notice how his fingers and mouth get thinner
+                                        </p>
+                                        
+                                            <table>
+                                                <tr>
+                                                    <td><h3>Before</h3></td>
+                                                    <td><h3>After</h3></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><img src = "Examples/HomerDeflate.png"></td>
+                                                    <td><img src = "Examples/HomerDeflate-0.005.png"></td>
+                                                </tr>
+                                            </table>
+                                    
+
+
+                                    <HR>
+                                        <h2><a name = "geometricextra">Geometric Tasks: Extra</a></h2>
+        
+                                        <h3><a name = "smoothSharpen">Laplacian Smooth/Sharpen (10 Points)</a></h3>
+                    
+                                        <p>
+                                            Move each vertex of the mesh by the average of the vectors from the vertex to its neighbors.  This is depicted by the green vector in the image below, which is the mean of the black vectors pointing from the vertex (red dot) to its neighbors (grey dots).  When adding this vector to the vertex, it is smoothed, as it will move protrusions down towards a plane fit through its neighbors (the tip of the green arrow).  When subtracting this vector, it moves away from this plane, and the mesh is sharpened.
+                                        <p>
+
+                                        <img src = "2DDiscreteCurvature.svg">
+                                        
+                                        
+                                        <p>
+                                        <h4>Code To Write</h4> You should fill in the <code>laplacianSmoothSharpen()</code> function of the <code>HEdgeMesh</code> class.
+                                        </p>
+    
+    
+                                        <div id = "tips">
+                                            <h4>Tips</h4>
+                                            <ul>
+                                            <li>The <code>scaleAndAdd()</code> function of <code>vec3</code> will come in handy here as well.</li>
+                                            <li>
+                                                To really do this correctly, you should create a new list of vertex positions and then copy them over at the end, so that neighboring vertex positions don't change as you're iterating.
+                                            </li>
+                                            </ul>
+                                        </div>
+                                        
+                                        <h3>Debugging GUI</h3>
+                                        <p>
+                                            You can display the result of this operation by clicking <code>laplacianSmooth</code> and <code>laplacianSharpen</code> in the <code>Geometric Tasks</code> menu.
+                                        </p>
+    
+                                        <p>
+                                            Below is an example of running 5 iterations of smooth on <code>proftralie.off</code>
+                                        </p>
+                                        
+                                            <table>
+                                                <tr>
+                                                    <td><h3>Before</h3></td>
+                                                    <td><h3>After 5 Iterations of Smooth</h3></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><img src = "Examples/Smooth0.png"></td>
+                                                    <td><img src = "Examples/Smooth5.png"></td>
+                                                </tr>
+                                            </table>
+    
+                                            <p>
+                                                Below is an example of running a single iteration of sharpen on <code>cow.off</code>
+                                            </p>
+                                            
+                                                <table>
+                                                    <tr>
+                                                        <td><h3>Before</h3></td>
+                                                        <td><h3>After 1 Iteration of Sharpen</h3></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><img src = "Examples/Sharpen0.png"></td>
+                                                        <td><img src = "Examples/Sharpen1.png"></td>
+                                                    </tr>
+                                                </table>
+
+                                            <h3><a name = "warp">Per-Vertex Warp (10 Points)</a></h3>
+                
+                                            <p>
+                                                Apply some function to the vertices to move them to a new position.  For instance, you could try to make the mesh twist by moving each vertex up a helix.
+                                            <p>
+                                            
+                                            
+                                            <p>
+                                            <h4>Code To Write</h4> You should fill in the <code>warp()</code> function of the <code>HEdgeMesh</code> class.
+                                            </p>
+
+                                    <HR>
+                                        <h2><a name = "topological">Topological Tasks</a></h2>
+        
+                                        <h3><a name = "boundaryCycles">Find Boundary Cycles (10 Points)</a></h3>
+                    
+                                        <p>
+                                            Return a list of boundary cycles on the mesh, where each boundary cycle is its own list of <code>HEdge</code> objects, each with a null face.
+                                        <p>
+                                        
+                                        
+                                        <p>
+                                        <h4>Code To Write</h4> You should fill in the <code>getBoundaryCycles()</code> function of the <code>HEdgeMesh</code> class.
+                                        </p>
+    
+    
+                                        <div id = "tips">
+                                            <h4>Tips</h4>
+                                            <ul>
+                                                <li>You will need to loop through all of the edges in the mesh to find ones that have a face as null (<code>e.face === null</code>).  You can access the list of edges as the <code>edges</code> field of <code>HEdgeMesh</code>.</li>
+                                            <li>
+                                                To make sure you don't accidentally repeat boundary cycles, you should add a variable to an edge which stores whether this edge has been checked yet, and initialize all of these variables to be "false."  Note that you can add fields to objects dynamically in Javascript.
+                                            </li>
+                                            </ul>
+                                        </div>
+                                        
+                                        <h3>Debugging GUI</h3>
+                                        <p>
+                                            You can display the boundary cycles computed by your code by clicking the <code>showBoundaries</code> checkbox in the <code>Topological Tasks</code> menu
+                                        </p>
+    
+                                        <p>
+                                            Below are a number of examples of boundaries for different meshes:
+                                        </p>
+                                        
+                                        <table>
+                                                <tr>
+                                                    <td><h3><code>icosahedroncut.off</code></h3></td>
+                                                    <td><h3><code>proftralie.off</code></h3></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><img src = "Examples/icosahedronBoundary.png"></td>
+                                                    <td><img src = "Examples/ProfTralieBoundary.png"><BR><img src = "Examples/ProfTralieBoundary2.png"></td>
+                                                </tr>
+                                                
+                                            </table>
+
+                                            <table>
+                                                <tr>
+                                                    <td><h3><code>bunny.off</code></h3></td>
+                                                    <td><h3><code>dinopet.off</code></h3></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><img src = "Examples/BunnyBoundary.png"></td>
+                                                    <td><img src = "Examples/DinopetBoundary.png"></td>
+                                                </tr>
+                                                
+                                            </table>
+
+                                        <h3><a name = "genus">Genus of A Watertight Mesh (5 Points)</a></h3>
+                
+                                        <p>
+                                            Return the genus of a watertight mesh, or <b>-1</b> if the mesh is not watertight.
+                                        <p>
+                                        
+                                        
+                                        <p>
+                                        <h4>Code To Write</h4> You should fill in the <code>getGenus()</code> function of the <code>HEdgeMesh</code> class.
+                                        </p>
+    
+    
+                                        <div id = "tips">
+                                            <h4>Tips</h4>
+                                            <ul>
+                                                <li>Remember that there are actually two half edges for every actual edge in the mesh, so be sure not to double count them!</li>
+                                                <li>
+                                                    You should use your <code>getBoundaryCycles()</code> function to figure out if the mesh is watertight.
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                        <h3>Debugging GUI</h3>
+                                        <p>
+                                            If you have the <code>showBoundaries</code> checkbox checked, then the <code>genus</code> field should update with the genus that you're computing for the mesh.  You should check the following shapes below
+                                        </p>
+
+                                        <h3>Examples of Meshes of Genus 0</h3>
+                                        <table>
+                                            <tr>
+                                                <td><h3><code>box2402.off</code></h3></td>
+                                                <td><h3><code>octopus.off</code></h3></td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src = "Examples/Genus0_Cube.png"></td>
+                                                <td><img src = "Examples/Genus0_Octopus.png"></td>
+                                            </tr>
+                                            <tr>
+                                                <td><h3><code>sphere1024.off</code></h3></td>
+                                                <td><h3><code>homer.off</code></h3></td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src = "Examples/Genus0_Sphere.png"></td>
+                                                <td><img src = "Examples/HomerDeflate.png"></td>
+                                            </tr>
+                                        </table>
+
+                                        <h3>Examples of Meshes of Genus 1</h3>
+                                        <table>
+                                            <tr>
+                                                <td><h3><code>torus32x32.off</code></h3></td>
+                                                <td><h3><code>teapot.off</code></h3></td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src = "Examples/Genus1_Torus.png"></td>
+                                                <td><img src = "Examples/Genus1_Teapot.png"></td>
+                                            </tr>
+                                        </table>
+
+                                        <h3>Examples of Meshes of Higher Genus</h3>
+                                        <table>
+                                            <tr>
+                                                <td><h3><code>genustwo.off</code></h3></td>
+                                                <td><h3><code>genusthree.off</code></h3></td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src = "Examples/Genus2.png"></td>
+                                                <td><img src = "Examples/Genus3.png"></td>
+                                            </tr>
+                                        </table>
+
+
+                                    <HR>
+                                        <h2><a name = "topologicalextra">Topological Tasks: Extra</a></h2>
+        
+                                        <h3><a name = "fillHoles">Fill Holes (15 Points)</a></h3>
+                    
+                                        <p>
+                                            For each boundary cycle, add triangle faces until the hole is completely blocked up.
+                                        <p>
+                                        
+                                        
+                                        <p>
+                                        <h4>Code To Write</h4> You should fill in the <code>fillHoles()</code> function of the <code>HEdgeMesh</code> class.  Be sure to set all of the fields of new faces and edges properly, and link them to existing half-edges in the mesh.
+                                        </p>
+
+
+                                        <div id = "tips">
+                                            <h4>Tips</h4>
+                                            <ul>
+                                                <li>To make this look nice, you should always add triangles with the largest minimum angle out of the all of the available triangles you can add at any particular point in time.</li>
+                                            </ul>
+                                        </div>
+
+
+
+                                    <HR>
+                                        <h2><a name = "meshcreation">Mesh Creation Tasks</a></h2>
+                                        
+                                        <p>
+                                        Below, you have the choice between two 20 point tasks.  If you do them both, then the second one counts as 20 extra points.  Note that if you do Loop Subdivision instead of Linear Subdivision, then that task is actually 30 points!
+                                        </p>
+
+                                        <h3><a name = "subdivision">Linear Subdivision (20 pts) or Loop Subdivision (30 pts)</a></h3>
+                    
+                                        <p>
+                                            Perform linear or loop subdivision on the mesh.
+                                        <p>
+                                        
+                                        
+                                        <p>
+                                        <h4>Code To Write</h4> You should fill in the <code>subdivideLinear()</code> function or the <code>subdivideLoop()</code> of the <code>HEdgeMesh</code> class.
+                                        </p>
+
+
+                                        <h3><a name = "truncate">Truncate (20 pts)</a></h3>
+                    
+                                        <p>
+                                            Truncate the mesh by slicing off the tips of each vertex by some amount.
+                                        <p>
+                                        
+                                        
+                                        <p>
+                                        <h4>Code To Write</h4> You should fill in the <code>truncate()</code> function of the <code>HEdgeMesh</code> class.
+                                        </p>
+
+
+                                    <HR><h2><a name = "artcontest">Art Contest Submission (5 Points)</a></h2>        
+
+                                        <p>
+                                            Do some interesting combination of your techniques above, and save the result as an .off file using  the <code>saveOffFile</code> button in the menu.  You should submit your .off files, along with screenshots.  Feel free to submit multiple .off files, including interesting bugs!
+                                        </p>
+
+                                    </div>
+						</div>
+					</div>
+
+					<!--LaTeX in Javascript!-->
+					<script src="../../../../jsMath/easy/load.js"></script>
+					<!--Syntax highlighting in Javascript!-->
+					<script type="text/javascript" src="../../../../syntaxhighlighter/scripts/shCore.js"></script>
+					<script type="text/javascript" src="../../../syntaxhighlighter/scripts/shBrushJScript.js"></script>
+					<script type="text/javascript" src="../../../../syntaxhighlighter/scripts/shBrushCpp.js"></script>
+					<script type="text/javascript" src="../../../../syntaxhighlighter/scripts/shBrushMatlabSimple.js"></script>
+					<script type="text/javascript" src="../../../../syntaxhighlighter/scripts/shBrushPython.js"></script>
+					<link type="text/css" rel="stylesheet" href="../../../../syntaxhighlighter/styles/shCoreDefault.css"/>
+					<script type="text/javascript">SyntaxHighlighter.all();</script>
+
+			</div>
+			
+            <!-- Start of StatCounter Code -->
+            <script type="text/javascript">
+            var sc_project=7309088; 
+            var sc_invisible=1; 
+            var sc_security="f655b56d"; 
+            </script>
+            <script type="text/javascript"
+            src="http://www.statcounter.com/counter/counter.js"></script>
+            <noscript><div class="statcounter"><a title="free hit counter"
+            href="http://statcounter.com/" target="_blank"><img class="statcounter"
+            src="http://c.statcounter.com/7309088/0/f655b56d/1/" alt="free hit
+            counter"></a></div></noscript>
+            <!-- End of StatCounter Code -->
+<!-- End Sidebar !-->
+
